@@ -1,1 +1,289 @@
-# Zaastudio
+#<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAA STUDIO - Lobi Utama</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+        body{background:linear-gradient(135deg,#0f0f23 0%,#1a1a3a 100%);min-height:100vh;color:#fff;}
+        
+        .header{padding:2rem;text-align:center;border-bottom:1px solid rgba(0,255,255,0.2);}
+        .logo{font-size:3.2rem;font-weight:900;color:#00ffff;text-shadow:0 0 20px #00ffff;}
+        .tagline{margin-top:0.5rem;color:#aaf0ff;font-size:1.15rem;}
+        .status-login{margin-top:0.8rem;font-size:0.9rem;}
+
+        .container{max-width:1250px;margin:2rem auto;padding:0 1rem;display:grid;grid-template-columns:2fr 1fr;gap:2rem;}
+        @media(max-width:768px){.container{grid-template-columns:1fr;} .logo{font-size:2.2rem;}}
+
+        .card{background:rgba(255,255,255,0.05);border-radius:15px;padding:1.8rem;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);margin-bottom:1.5rem;}
+        .card h2{color:#00ffff;margin-bottom:1.2rem;border-left:5px solid #00ffff;padding-left:0.8rem;}
+        .card.admin h2{color:#ff4444;border-left-color:#ff4444;}
+        .card.anggota h2{color:#44ff88;border-left-color:#44ff88;}
+        
+        .grid-menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;}
+        .menu-item{display:block;padding:1rem;text-align:center;background:rgba(0,255,255,0.08);border-radius:10px;color:#fff;text-decoration:none;transition:all 0.15s ease;border:2px solid transparent;cursor:pointer;position:relative;z-index:10;user-select:none;}
+        .menu-item:hover{background:#00ffff;color:#0f0f23;transform:translateY(-3px);border-color:#fff;font-weight:600;box-shadow:0 4px 12px rgba(0,255,255,0.3);}
+        .menu-item:active{transform:scale(0.96);border-color:#00ffff;box-shadow:none;}
+        .menu-item.admin-btn{background:rgba(255,68,68,0.1);border-color:rgba(255,68,68,0.2);}
+        .menu-item.admin-btn:hover{background:#ff4444;border-color:#ff6666;box-shadow:0 4px 12px rgba(255,68,68,0.3);}
+        .menu-item.anggota-btn{background:rgba(68,255,136,0.1);border-color:rgba(68,255,136,0.2);}
+        .menu-item.anggota-btn:hover{background:#44ff88;color:#000;border-color:#66ffaa;box-shadow:0 4px 12px rgba(68,255,136,0.3);}
+
+        .btn-salin{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);border:none;color:#fff;padding:3px 7px;border-radius:5px;font-size:0.7rem;cursor:pointer;opacity:0;transition:0.15s;z-index:20;}
+        .menu-item:hover .btn-salin{opacity:1;}
+        .btn-salin:hover{background:#00ffff;color:#000;transform:scale(1.1);}
+        .notif-salin,.notif-kirim{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#00ff55;color:#000;padding:0.9rem 1.8rem;border-radius:10px;font-weight:bold;display:none;z-index:9999;box-shadow:0 0 20px rgba(0,255,85,0.5);font-size:1rem;}
+        .notif-kirim{background:#00ccff;box-shadow:0 0 20px rgba(0,204,255,0.5);}
+
+        .form-saran{margin-top:1rem;padding:1.2rem;background:rgba(0,0,0,0.25);border-radius:10px;}
+        .form-saran input,.form-saran textarea{width:100%;padding:0.8rem;margin:0.6rem 0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:0.95rem;}
+        .btn-kirim-saran{background:#00ccff;color:#000;border:none;padding:0.8rem 1.5rem;border-radius:8px;font-weight:bold;cursor:pointer;transition:0.15s;margin-top:0.8rem;width:100%;font-size:1rem;}
+        .btn-kirim-saran:hover{background:#fff;transform:translateY(-2px);box-shadow:0 3px 10px rgba(0,204,255,0.4);}
+
+        .form-upload{margin-top:1rem;padding:1.2rem;background:rgba(0,0,0,0.25);border-radius:10px;}
+        .form-upload select, .form-upload input, .form-upload textarea{width:100%;padding:0.8rem;margin:0.6rem 0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:0.95rem;}
+        .btn{padding:0.8rem 1.5rem;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:0.15s;margin-top:0.6rem;font-size:0.95rem;}
+        .btn:active{transform:scale(0.97);}
+        .btn-unggah{background:#ff4444;color:#fff;width:100%;}
+        .btn-keluar{background:#ff8800;color:#000;width:100%;margin-top:1rem;}
+        .btn-hapus{background:#ff2222;color:#fff;padding:0.5rem 1rem;font-size:0.85rem;width:100%;margin-top:0.3rem;}
+        .btn-salin-link{background:#00ccff;color:#000;margin-left:0.5rem;padding:0.6rem 1rem;flex-shrink:0;}
+
+        .panel{background:rgba(255,255,255,0.05);border-radius:15px;padding:1.8rem;backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.15);height:fit-content;}
+        .panel h3{color:#ffdd00;margin-bottom:1rem;}
+        .server-list{margin:1.2rem 0;}
+        .server-item{padding:0.8rem;background:rgba(0,255,255,0.05);border-radius:8px;margin-bottom:0.6rem;display:flex;justify-content:space-between;align-items:center;}
+        .status-online{color:#44ff88;font-weight:bold;}
+        .status-terhubung{color:#ffdd00;font-weight:bold;animation:berkedip 1.5s infinite;}
+        @keyframes berkedip{0%,100%{opacity:1;}50%{opacity:0.5;}}
+
+        .bagi-akses{margin-top:1.2rem;padding:1rem;background:rgba(0,0,0,0.25);border-radius:8px;}
+        .alamat-lokal{background:rgba(0,0,0,0.4);padding:0.7rem;border-radius:6px;margin:0.5rem 0;display:flex;justify-content:space-between;align-items:center;gap:0.5rem;}
+        .alamat-lokal span{font-family:monospace;color:#00ffff;font-size:0.9rem;}
+        .btn-salin-ip{background:#00ccff;color:#000;border:none;padding:0.4rem 0.8rem;border-radius:4px;font-weight:bold;cursor:pointer;}
+
+        .login-box{margin-top:1.2rem;padding:1.2rem;background:rgba(0,0,0,0.25);border-radius:10px;}
+        .login-box input{width:100%;padding:0.8rem;margin:0.6rem 0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:0.95rem;}
+
+        .menu-admin{display:none;}
+        .menu-admin.aktif{display:block;animation:muncul 0.3s ease;}
+        @keyframes muncul{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+        .update-item{padding:0.9rem 0;border-bottom:1px solid rgba(255,255,255,0.1);}
+        .update-item:last-child{border-bottom:none;}
+        .tgl-update{font-size:0.85rem;color:#88ccff;margin-top:0.4rem;}
+        .versi{display:inline-block;background:#00ff99;color:#000;padding:0.3rem 0.7rem;border-radius:5px;font-size:0.8rem;font-weight:bold;margin-right:0.5rem;}
+        .form-update{margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.1);}
+
+        .footer{text-align:center;padding:2rem;margin-top:3rem;border-top:1px solid rgba(255,255,255,0.2);color:#88ccff;}
+    </style>
+</head>
+<body>
+
+<div class="notif-salin" id="notifSalin">✅ Link sudah disalin!</div>
+<div class="notif-kirim" id="notifKirim">✅ Saran dikirim ke zaaayaho698@gmail.com!</div>
+
+<div class="header">
+    <h1 class="logo">ZAA STUDIO</h1>
+    <p class="tagline">Pusat Alat, Proyek & Komunitas Kreatif</p>
+    <div class="status-login" id="statusPengguna">👤 Masuk sebagai: Pengguna Biasa</div>
+</div>
+
+<div class="container">
+    <div>
+        <div class="card anggota">
+            <h2>📂 KOLEKSI & ALAT KAMI</h2>
+            <div class="grid-menu" id="tampilKonten">
+                <a href="game-interaktif.html" target="_blank" class="menu-item anggota-btn">🎮 Game Interaktif<button class="btn-salin" onclick="event.stopPropagation(); salinLink('game-interaktif.html')">📋</button></a>
+                <a href="kuis-pengetahuan.html" target="_blank" class="menu-item anggota-btn">📝 Kuis & Pengetahuan<button class="btn-salin" onclick="event.stopPropagation(); salinLink('kuis-pengetahuan.html')">📋</button></a>
+                <a href="satria-ai.html" target="_blank" class="menu-item anggota-btn">🤖 Satria AI<button class="btn-salin" onclick="event.stopPropagation(); salinLink('satria-ai.html')">📋</button></a>
+                <a href="alat-konten.html" target="_blank" class="menu-item anggota-btn">🎬 Alat Konten<button class="btn-salin" onclick="event.stopPropagation(); salinLink('alat-konten.html')">📋</button></a>
+                <a href="alat-web.html" target="_blank" class="menu-item anggota-btn">🔧 Alat Web & HTML<button class="btn-salin" onclick="event.stopPropagation(); salinLink('alat-web.html')">📋</button></a>
+                <a href="pengumuman.html" target="_blank" class="menu-item anggota-btn">📢 Pengumuman<button class="btn-salin" onclick="event.stopPropagation(); salinLink('pengumuman.html')">📋</button></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>💡 SARAN PEMBARUAN</h2>
+            <p style="color:#aaa;margin-bottom:1rem;">Kirim ide langsung ke email kamu:</p>
+            <div class="form-saran">
+                <input type="text" id="namaPengirim" placeholder="Nama kamu">
+                <input type="text" id="judulSaran" placeholder="Judul saran">
+                <textarea id="isiSaran" rows="3" placeholder="Isi saran kamu..." required></textarea>
+                <button class="btn-kirim-saran" onclick="kirimSaranKeEmail()">📤 KIRIM SARAN</button>
+            </div>
+        </div>
+
+        <div class="card admin menu-admin" id="kotakAdmin">
+            <h2>🔐 HALAMAN ADMIN</h2>
+            <div class="grid-menu">
+                <a href="#" class="menu-item admin-btn">⚙️ Kelola Alat<button class="btn-salin" onclick="event.stopPropagation(); salinLink('#')">📋</button></a>
+                <a href="#" class="menu-item admin-btn">👥 Daftar Anggota<button class="btn-salin" onclick="event.stopPropagation(); salinLink('#')">📋</button></a>
+                <a href="#" class="menu-item admin-btn">📊 Laporan<button class="btn-salin" onclick="event.stopPropagation(); salinLink('#')">📋</button></a>
+                <a href="#" class="menu-item admin-btn">🔑 Pengaturan Server<button class="btn-salin" onclick="event.stopPropagation(); salinLink('#')">📋</button></a>
+                <a href="#" class="menu-item admin-btn">💾 Cadangkan Data<button class="btn-salin" onclick="event.stopPropagation(); salinLink('#')">📋</button></a>
+            </div>
+            <div class="form-upload">
+                <h4>➕ TAMBAH KONTEN</h4>
+                <select id="jenisKonten">
+                    <option value="">-- Pilih Jenis --</option>
+                    <option value="game">🎮 Game</option>
+                    <option value="video">🎬 Video</option>
+                    <option value="apk">📦 Aplikasi</option>
+                    <option value="gambar">🖼️ Gambar</option>
+                </select>
+                <input type="text" id="namaKonten" placeholder="Nama konten">
+                <div style="display:flex;gap:0.5rem;">
+                    <input type="text" id="linkKonten" placeholder="Link HTML/Web" style="flex:1;">
+                    <button class="btn btn-salin-link" onclick="salinDariInput()">📋</button>
+                </div>
+                <textarea id="deskripsiKonten" rows="2" placeholder="Keterangan"></textarea>
+                <button class="btn btn-unggah" onclick="simpanKonten()">✅ TAMBAHKAN</button>
+            </div>
+            <button class="btn btn-keluar" onclick="keluarAdmin()">🚪 KELUAR ADMIN</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="panel">
+            <h3>🖥️ STATUS SERVER & KONEKSI</h3>
+            <div class="server-list">
+                <div class="server-item"><span>🌐 Server Utama</span><span class="status-online">● ONLINE</span></div>
+                <div class="server-item"><span>🔧 Server Pengembangan</span><span class="status-online">● ONLINE</span></div>
+                <div class="server-item"><span>🛡️ Server Cadangan</span><span class="status-offline">● SIAP</span></div>
+                <div class="server-item"><span>🤖 Server Satria AI</span><span class="status-online">● ONLINE</span></div>
+                <div class="server-item"><span>🌐 Akses Internet</span><span class="status-terhubung">● TERHUBUNG</span></div>
+            </div>
+
+            <div class="bagi-akses">
+                <h4>🔗 ALAMAT WEBSITE KAMU:</h4>
+                <div class="alamat-lokal">
+                    <span id="alamatWeb">Akan muncul setelah diunggah ke GitHub</span>
+                    <button class="btn-salin-ip" onclick="salinAlamatWeb()">📋 Salin</button>
+                </div>
+                <p style="font-size:0.8rem;color:#aaa;margin-top:0.5rem;">Bisa dibuka dimanapun, kapan saja</p>
+            </div>
+
+            <div class="login-box" id="kotakMasukAdmin">
+                <h4>🔐 MASUK ADMIN</h4>
+                <input type="password" id="sandiAdmin" placeholder="Masukkan sandi">
+                <button class="btn btn-masuk btn" onclick="masukAdmin()">✅ MASUK</button>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top:1.5rem;">
+            <h3>📢 PEMBARUAN TERBARU</h3>
+            <div id="daftarUpdate"></div>
+            <div class="form-update">
+                <input type="text" id="inpVersi" placeholder="Versi">
+                <textarea id="inpIsi" rows="3" placeholder="Isi pembaruan"></textarea>
+                <button class="btn" style="background:#00ffff;color:#000;" onclick="tambahUpdate()">✅ SIMPAN</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>&copy; 2026 ZAA STUDIO | Pemilik: Kamu | Saran ke: zaaayaho698@gmail.com</p>
+</div>
+
+<script>
+const SANDI_ADMIN_SAYA = "zaa12345";
+const EMAIL_PEMILIK = "zaaayaho698@gmail.com";
+let daftarKonten = JSON.parse(localStorage.getItem('kontenZaaStudio')) || [];
+let dataUpdate = JSON.parse(localStorage.getItem('updateZaaStudio')) || [
+    {versi: 'Versi 1.8.0', isi: '✅ Siap dipasang di GitHub Pages, bisa dibuka dimanapun', tgl: '07 Agustus 2026'},
+    {versi: 'Versi 1.7.0', isi: '✅ Bisa terhubung antar perangkat', tgl: '07 Agustus 2026'}
+];
+
+function kirimSaranKeEmail(){
+    const nama = document.getElementById('namaPengirim').value.trim() || 'Pengguna Anonim';
+    const judul = document.getElementById('judulSaran').value.trim() || 'Saran Baru';
+    const isi = document.getElementById('isiSaran').value.trim();
+    if(!isi) return alert('⚠️ Isi dulu saran kamu!');
+    const subjek = encodeURIComponent(`[SARAN ZAA STUDIO] ${judul}`);
+    const pesan = encodeURIComponent(`Nama: ${nama}\nJudul: ${judul}\nIsi:\n${isi}`);
+    window.location.href = `mailto:${EMAIL_PEMILIK}?subject=${subjek}&body=${pesan}`;
+    document.getElementById('notifKirim').style.display='block';
+    setTimeout(()=>document.getElementById('notifKirim').style.display='none',2500);
+    ['namaPengirim','judulSaran','isiSaran'].forEach(id=>document.getElementById(id).value='');
+}
+
+function salinLink(linknya){
+    navigator.clipboard.writeText(linknya).then(()=>{
+        document.getElementById('notifSalin').style.display='block';
+        setTimeout(()=>document.getElementById('notifSalin').style.display='none',1500);
+    });
+}
+function salinAlamatWeb(){
+    const alamat = document.getElementById('alamatWeb').textContent;
+    if(alamat.includes('Akan muncul')) return alert('⚠️ Unggah dulu ke GitHub agar alamatnya muncul!');
+    salinLink(alamat);
+}
+function salinDariInput(){
+    const link = document.getElementById('linkKonten').value.trim();
+    if(!link) return alert('⚠️ Isi dulu linknya!');
+    salinLink(link);
+}
+
+function masukAdmin(){
+    if(document.getElementById('sandiAdmin').value === SANDI_ADMIN_SAYA){
+        document.getElementById('kotakAdmin').classList.add('aktif');
+        document.getElementById('kotakMasukAdmin').style.display='none';
+        document.getElementById('statusPengguna').innerHTML='🔓 Masuk sebagai: <b>PEMILIK</b>';
+        alert('✅ Masuk Admin Berhasil!');
+    }else alert('❌ Sandi salah!');
+}
+function keluarAdmin(){
+    document.getElementById('kotakAdmin').classList.remove('aktif');
+    document.getElementById('kotakMasukAdmin').style.display='block';
+    document.getElementById('statusPengguna').innerHTML='👤 Masuk sebagai: Pengguna Biasa';
+    document.getElementById('sandiAdmin').value='';
+}
+
+function tampilkanKonten(){
+    const wadah = document.getElementById('tampilKonten');
+    wadah.innerHTML = `
+        <a href="game-interaktif.html" target="_blank" class="menu-item anggota-btn">🎮 Game Interaktif<button class="btn-salin" onclick="event.stopPropagation(); salinLink('game-interaktif.html')">📋</button></a>
+        <a href="kuis-pengetahuan.html" target="_blank" class="menu-item anggota-btn">📝 Kuis<button class="btn-salin" onclick="event.stopPropagation(); salinLink('kuis-pengetahuan.html')">📋</button></a>
+        <a href="satria-ai.html" target="_blank" class="menu-item anggota-btn">🤖 Satria AI<button class="btn-salin" onclick="event.stopPropagation(); salinLink('satria-ai.html')">📋</button></a>
+        <a href="alat-konten.html" target="_blank" class="menu-item anggota-btn">🎬 Alat Konten<button class="btn-salin" onclick="event.stopPropagation(); salinLink('alat-konten.html')">📋</button></a>
+        <a href="alat-web.html" target="_blank" class="menu-item anggota-btn">🔧 Alat Web<button class="btn-salin" onclick="event.stopPropagation(); salinLink('alat-web.html')">📋</button></a>
+        <a href="pengumuman.html" target="_blank" class="menu-item anggota-btn">📢 Pengumuman<button class="btn-salin" onclick="event.stopPropagation(); salinLink('pengumuman.html')">📋</button></a>
+    `;
+    if(daftarKonten.length>0){
+        daftarKonten.forEach((item,i)=>{
+            const ikon = {game:'🎮',video:'🎬',apk:'📦',gambar:'🖼️'}[item.jenis];
+            wadah.innerHTML += `<a href="${item.link}" target="_blank" class="menu-item anggota-btn">${ikon} ${item.nama}<button class="btn-salin" onclick="event.stopPropagation(); salinLink('${item.link}')">📋</button></a>`;
+        });
+    }
+}
+function simpanKonten(){
+    const jenis=document.getElementById('jenisKonten').value,nama=document.getElementById('namaKonten').value.trim(),link=document.getElementById('linkKonten').value.trim();
+    if(!jenis||!nama||!link) return alert('⚠️ Lengkapi data!');
+    daftarKonten.unshift({jenis,nama,link});
+    localStorage.setItem('kontenZaaStudio',JSON.stringify(daftarKonten));
+    ['jenisKonten','namaKonten','linkKonten','deskripsiKonten'].forEach(id=>document.getElementById(id).value='');
+    tampilkanKonten();
+    alert('✅ Tersimpan!');
+}
+function tampilkanUpdate(){
+    const wadah=document.getElementById('daftarUpdate');wadah.innerHTML='';
+    dataUpdate.forEach(item=>wadah.innerHTML+=`<div class="update-item"><span class="versi">${item.versi}</span><div>${item.isi}</div><div class="tgl-update">📅 ${item.tgl}</div></div>`);
+}
+function tambahUpdate(){
+    const v=document.getElementById('inpVersi').value.trim(),i=document.getElementById('inpIsi').value.trim();
+    if(!v||!i) return alert('⚠️ Isi dulu!');
+    const tgl=new Date().getDate()+' '+new Date().toLocaleString('id-ID',{month:'long'})+' '+new Date().getFullYear();
+    dataUpdate.unshift({versi:v,isi:i,tgl});
+    localStorage.setItem('updateZaaStudio',JSON.stringify(dataUpdate));
+    document.getElementById('inpVersi').value='';document.getElementById('inpIsi').value='';
+    tampilkanUpdate();alert('✅ Tersimpan!');
+}
+
+tampilkanKonten();tampilkanUpdate();
+</script>
+</body>
+</html>
+ Zaastudio
